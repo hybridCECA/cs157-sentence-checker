@@ -42,28 +42,43 @@ def powerset(iterable):
     return p_set[1:]
 
 
-all_false = True
-all_true = True
-for m in powerset(list(range(16))):
-    model = m
+exprs = """
+a.	∃x.(p(x) ∧ ¬q(x)) ⇔ ∀x.(¬p(x) ∨ q(x))	
+b.	∀x.(p(x) ⇒ q(x)) ⇔ (∀x.p(x) ⇒ ∀x.q(x))	
+c.	∀x.∀y.r(x,y) ⇒ ¬∃x.r(x,x)	
+d.	∀x.∀y.(p(x) ⇒ q(y)) ⇔ (∃x.p(x) ⇒ ∀y.q(y))	
+e.	∃x.p(x) ∨ ¬∀x.p(x)
+"""
 
-    val = some(lambda x: p(x) and not q(x)) == all(lambda x: not p(x) or q(x))
-    # val = all(lambda x: implies(p(x), q(x))) == implies(all(lambda x: p(x)), all(lambda x: q(x)))
-    # val = implies(all(lambda x: all(lambda y: r(x, y))), not some(lambda x: r(x, x)))
-    # val = all(lambda x: all(lambda y: implies(p(x), q(y)))) == implies(some(lambda x: p(x)), all(lambda y: q(y)))
-    # val = some(lambda x: p(x)) or not all(lambda x: p(x))
 
+def check(expr):
+    global model
+
+    all_false = True
+    all_true = True
+    for m in powerset(list(range(16))):
+        model = m
+
+        val = eval(expr)
+
+        if val:
+            all_false = False
+        else:
+            all_true = False
+
+    if not all_false and not all_true:
+        return "Contingent"
+    if all_false:
+        return "Unsatisfiable"
+    if all_true:
+        return "Valid"
+
+if __name__ == "__main__":
+    expr = "some(lambda x: p(x) and not q(x)) == all(lambda x: not p(x) or q(x))"
+    # expr = all(lambda x: implies(p(x), q(x))) == implies(all(lambda x: p(x)), all(lambda x: q(x)))
+    # expr = implies(all(lambda x: all(lambda y: r(x, y))), not some(lambda x: r(x, x)))
+    # expr = all(lambda x: all(lambda y: implies(p(x), q(y)))) == implies(some(lambda x: p(x)), all(lambda y: q(y)))
+    # expr = some(lambda x: p(x)) or not all(lambda x: p(x))
+
+    val = check(expr)
     print(val)
-
-    if val:
-        all_false = False
-    else:
-        all_true = False
-
-print()
-if not all_false and not all_true:
-    print("Contingent")
-if all_false:
-    print("Unsatisfiable")
-if all_true:
-    print("Valid")
