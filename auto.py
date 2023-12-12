@@ -3,11 +3,11 @@ from checker import check
 
 if __name__ == "__main__":
     exprs = """
-a.	∃x.(p(x) ∧ ¬q(x)) ⇔ ∀x.(¬p(x) ∨ q(x))	
-b.	∀x.(p(x) ⇒ q(x)) ⇔ (∀x.p(x) ⇒ ∀x.q(x))	
-c.	∀x.∀y.r(x,y) ⇒ ¬∃x.r(x,x)	
-d.	∀x.∀y.(p(x) ⇒ q(y)) ⇔ (∃x.p(x) ⇒ ∀y.q(y))	
-e.	∃x.p(x) ∨ ¬∀x.p(x)
+a.	∀x.(p(x) ⇒ q(x)) ⇒ ∃x.(p(x) ∧ q(x))	
+b.	∀x.(p(x) ∨ q(x)) ∧ ∀x.(p(x) ⇒ q(x)) ∧ ∃x.¬q(x)	
+c.	(∀x.p(x) ⇒ ∀x.q(x)) ∨ (¬∀x.q(x) ⇒ ¬∀x.p(x))	
+d.	(∀x.p(x) ⇒ ∃x.q(x)) ∨ (¬∀x.p(x) ⇒ ¬∃x.q(x))	
+e.	∀x.∀y.(r(x,y) ⇔ r(y,x)) ⇒ ∃x.r(x,x)
     """
 
     for expr in exprs.splitlines():

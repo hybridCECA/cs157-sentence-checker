@@ -87,7 +87,7 @@ class Parser:
             return f"(not {val})"
         elif re.fullmatch(r"[a-z]\([a-z,]+\)", e):
             if e[0] not in "pqr":
-                raise RuntimeError("")
+                raise RuntimeError("Unknown function")
 
             if "," in e:
                 self.r_swap_flag = True
