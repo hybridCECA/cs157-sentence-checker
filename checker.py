@@ -2,6 +2,21 @@ from itertools import chain, combinations
 
 model = None
 
+def union(a, b):
+    return a and b
+
+def intersect(a, b):
+    return a or b
+
+def entails(f1, f2):
+    return all(lambda x: implies(f1(x), f2(x)))
+
+def satisfiable(f):
+    return some(lambda x: f(x))
+
+def valid(f):
+    return all(lambda x: f(x))
+
 def implies(a, b):
     return not a or b
 
@@ -18,6 +33,14 @@ def q(n):
 
 def r(x, y):
     return get_bit(x, 2) != get_bit(y, 3)
+
+# r split into 2 functions
+# DO NOT USE r and (r1 or r2)
+def r1(x):
+    return get_bit(x, 2)
+
+def r2(x):
+    return get_bit(x, 3)
 
 def all(func):
     is_all = True
@@ -74,7 +97,8 @@ def check(expr):
         return "Valid"
 
 if __name__ == "__main__":
-    expr = "some(lambda x: p(x) and not q(x)) == all(lambda x: not p(x) or q(x))"
+    expr = "implies(not (entails(p, lambda x: not q(x))), entails(p, q))"
+    # expr = "some(lambda x: p(x) and not q(x)) == all(lambda x: not p(x) or q(x))"
     # expr = all(lambda x: implies(p(x), q(x))) == implies(all(lambda x: p(x)), all(lambda x: q(x)))
     # expr = implies(all(lambda x: all(lambda y: r(x, y))), not some(lambda x: r(x, x)))
     # expr = all(lambda x: all(lambda y: implies(p(x), q(y)))) == implies(some(lambda x: p(x)), all(lambda y: q(y)))
