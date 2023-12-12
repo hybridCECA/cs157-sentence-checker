@@ -141,15 +141,16 @@ class EntailsParser:
 
             if operator_num == 2:
                 e = e[:index]
-                e1, e2 = [variables[c] for c in e if c in variables]
+                e1, e2 = e.split("and")
             else:
                 operator = get_operator(operator_num)
                 l = len(operator)
 
                 e1 = e[:index]
                 e2 = e[index + l:]
-                e1 = self.parse_expr(e1)
-                e2 = self.parse_expr(e2)
+
+            e1 = self.parse_expr(e1)
+            e2 = self.parse_expr(e2)
 
             return transform[operator_num](e1, e2)
 
